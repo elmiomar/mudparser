@@ -1,0 +1,100 @@
+{
+  "ietf-mud:mud": {
+    "mud-version": 1,
+    "mud-url": "https://amazonecho.com/amazonecho",
+    "last-update": "2018-04-08T00:02:29.117+10:00",
+    "cache-validity": 100,
+    "is-supported": true,
+    "systeminfo": "amazonEcho",
+    "from-device-policy": {
+      "access-lists": {
+        "access-list": [
+          {
+            "name": "from-ipv4-amazonecho"
+          },
+          {
+            "name": "from-ethernet-amazonecho"
+          }
+        ]
+      }
+    },
+    "to-device-policy": {
+      "access-lists": {
+        "access-list": [
+          {
+            "name": "to-ipv4-amazonecho"
+          }
+        ]
+      }
+    }
+  },
+  "ietf-access-control-list:access-lists": {
+    "acl": [
+      {
+        "name": "from-ipv4-amazonecho",
+        "type": "ipv4-acl-type",
+        "aces": {
+          "ace": [
+            {
+              "name": "from-ipv4-amazonecho-0",
+              "matches": {
+                "ipv4": {
+                  "protocol": 6,
+                  "ietf-acldns:dst-dnsname": "dcape-na.amazon.com"
+                },
+                "tcp": {
+                  "destination-port": {
+                    "operator": "eq",
+                    "port": 443
+                  },
+                  "ietf-mud:direction-initiated": "from-device"
+                }
+              },
+              "actions": {
+                "forwarding": "accept"
+              }
+            },
+            {
+              "name": "from-ipv4-amazonecho-1",
+              "matches": {
+                "ipv4": {
+                  "protocol": 6,
+                  "ietf-acldns:dst-dnsname": "softwareupdates.amazon.com"
+                },
+                "tcp": {
+                  "destination-port": {
+                    "operator": "eq",
+                    "port": 443
+                  },
+                  "ietf-mud:direction-initiated": "from-device"
+                }
+              },
+              "actions": {
+                "forwarding": "accept"
+              }
+            },
+            {
+              "name": "from-ipv4-amazonecho-2",
+              "matches": {
+                "ipv4": {
+                  "protocol": 6,
+                  "ietf-acldns:dst-dnsname": "spectrum.s3.amazonaws.com"
+                },
+                "tcp": {
+                  "destination-port": {
+                    "operator": "eq",
+                    "port": 80
+                  },
+                  "ietf-mud:direction-initiated": "from-device"
+                }
+              },
+              "actions": {
+                "forwarding": "accept"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
