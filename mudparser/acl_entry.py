@@ -43,18 +43,26 @@ class AccessListEntry:
         elif match_on == 'ietf-mud:mud':
             self.matches['mud'] = MUDMatch(json_obj)
 
-    def print_rules(self, direction='output'):
-        rule = "[" + self.name + "] "
+    def print_rules(self, direction):
+        rule = "[" + direction + "] "  # "[" + self.name + "] "
         for k, a in self.actions.items():
             if k == 'logging':
                 pass
             elif k == 'forwarding':
-                rule += a + " " + direction
+                rule += a + " "
                 for k, match in self.matches.items():
                     if k == 'tcp':
-                        rule += " tcp " + str(match.dst_port.port)
+                        if direction == 'to':
+                            rule += "tcp from" + str(match.src_port.port) + " to any"
+                        elif direction == 'from':
+                            rule += "tcp from any to " + str(match.dst_port.port)
                     elif k == 'udp':
-                        rule += " udp " + str(match.dst_port.port)
+                        if direction == 'to':
+                            rule += "udp from" + str(match.src_port.port) + " to any"
+                        elif direction == 'from':
+                            rule += "udp from any to " + str(match.dst_port.port)
+                    elif k == 'eth':
+                        rule += "ethertype " + match.ethertype
         print(rule)
         # TODO: is __str__() better in this case?
 
