@@ -87,6 +87,90 @@
                   },
                   "ietf-mud:direction-initiated": "from-device"
                 }
+               },
+              "actions": {
+                "forwarding": "accept"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "to-ipv4-amazonecho",
+        "type": "ipv4-acl-type",
+        "aces": {
+          "ace": [
+            {
+              "name": "to-ipv4-amazonecho-0",
+              "matches": {
+                "ipv4": {
+                  "protocol": 6,
+                  "ietf-acldns:src-dnsname": "pindorama.amazon.com"
+                },
+                "tcp": {
+                  "source-port": {
+                    "operator": "eq",
+                    "port": 443
+                  }
+                }
+              },
+              "actions": {
+                "forwarding": "accept"
+              }
+            },
+            {
+              "name": "to-ipv4-amazonecho-1",
+              "matches": {
+                "ipv4": {
+                  "protocol": 6,
+                  "ietf-acldns:src-dnsname": "pd.npr.org"
+                },
+                "tcp": {
+                  "source-port": {
+                    "operator": "eq",
+                    "port": 80
+                  }
+                }
+              },
+              "actions": {
+                "forwarding": "accept"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "from-ethernet-amazonecho",
+        "type": "ethernet-acl-type",
+        "aces": {
+          "ace": [
+            {
+              "name": "from-ethernet-amazonecho-0",
+              "matches": {
+                "ietf-mud:mud": {
+                  "local-networks": [
+                    null
+                  ]
+                },
+                "eth": {
+                  "ethertype": "0x0006"
+                }
+              },
+              "actions": {
+                "forwarding": "accept"
+              }
+            },
+            {
+              "name": "from-ethernet-amazonecho-1",
+              "matches": {
+                "ietf-mud:mud": {
+                  "local-networks": [
+                    null
+                  ]
+                },
+                "eth": {
+                  "ethertype": "0x888e"
+                }
               },
               "actions": {
                 "forwarding": "accept"
