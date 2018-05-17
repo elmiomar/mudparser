@@ -5,6 +5,7 @@ Reads a json formatted file and returns an object.
 """
 
 import json
+import os
 from mudparser.acl import AccessList
 
 __all__ = ['Profile']
@@ -49,7 +50,7 @@ class Profile:
         self.is_supported = json_obj["is-supported"]
         self.system_info = json_obj["systeminfo"]
 
-        # TODO: test case these. They are not included in current test files
+        # TODO: supported commented below, they are not included in current json test files
         # self.mfg_name = json_obj["mfg-name"]
         # self.model_name = json_obj["model-name"]
         # self.firmware_rev = json_obj["firmware-rev"]
@@ -57,15 +58,36 @@ class Profile:
         # self.extensions = json_obj["extensions"]
 
         from_dev_policy_acls_obj = json_obj["from-device-policy"]["access-lists"]
-        acl_names = []
+        policy_acls = {}  # a dict that will hold the acls for from-device-policy
         for acl_obj in from_dev_policy_acls_obj["access-list"]:
-            acl_names.append(acl_obj["name"])
-        self.policies["from-device-policy"] = acl_names
+            acl_name = acl_obj["name"]
+            acl, found = self.__lookup_acl(acl_name)
+            if found:
+                policy_acls[acl_name] = acl
+            else:
+                print('json file missing acl with name "{}"'.format(acl_obj["name"]))
+                os._exit(1)
+        self.policies["from-device-policy"] = policy_acls
         to_dev_policy_acls_obj = json_obj["to-device-policy"]["access-lists"]
-        acl_names = []
+
+        policy_acls = {}  # a dict that will hold the acls for to-device-policy
         for acl_obj in to_dev_policy_acls_obj["access-list"]:
-            acl_names.append(acl_obj["name"])
-        self.policies["to-device-policy"] = acl_names
+            acl_name = acl_obj["name"]
+            acl, found = self.__lookup_acl(acl_name)
+            if found:
+                policy_acls[acl_name] = acl
+            else:
+                print('json file missing acl with name "{}"'.format(acl_obj["name"]))
+                os._exit(1)
+        self.policies["to-device-policy"] = policy_acls
+
+    def __lookup_acl(self, name):
+        try:
+            acl = self.acls[name]
+        except KeyError:
+            return None, False
+        else:
+            return acl, True
 
     def from_dev_policy(self):
         return self.policies['from-device-policy']
@@ -73,5 +95,43 @@ class Profile:
     def to_dev_policy(self):
         return self.policies['to-device-policy']
 
-    def access_list(self, key):
-        return self.acls[key]
+    def access_list(self, acl_name):
+        # This method returns an as well as the policy that uses it
+        # Return None, None if acl is not found
+        policy_name = self.__which_policy(acl_name)
+        # TODO: maybe add this direction(from/to) as attribute for acl object
+        if policy_name is not None:
+            if policy_name == 'from-device-policy':
+                return self.acls[acl_name], 'from'
+            elif policy_name == 'to-device-policy':
+                return self.acls[acl_name], 'to'
+        return None, None
+
+    def __which_policy(self, acl_name):
+        for policy_key, policy_acls in self.policies.items():
+            for name, acls in policy_acls.items():
+                if acl_name == name:
+                    return policy_key
+        return None
+
+    def print_rules(self):
+        for policy_key, policy_acls in self.policies.items():
+            for name, acl in policy_acls.items():
+                if policy_key == 'from-device-policy':
+                    acl.print_rules('from')
+                elif policy_key == 'to-device-policy':
+                    acl.print_rules('to')
+
+
+if __name__ == '__main__':
+    with open('../data/amazon_echo_short.json') as json_file:
+        profile = Profile(json_file)
+        # print(profile.from_dev_policy())
+        # print(profile.to_dev_policy())
+        # print(profile.access_lists())
+        # print(profile.access_list('from-ipv4-amazonecho').entries())
+        # for key, entry in profile.access_list('from-ipv4-amazonecho').entries().items():
+        #     print(entry.actions())
+    acl, direction = profile.access_list('from-ipv4-amazonecho')
+    acl.print_rules(direction)
+    profile.print_rules()
