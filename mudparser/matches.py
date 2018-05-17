@@ -39,6 +39,7 @@ class TCPMatch:
     def __init__(self, json_obj):
         self._json_obj = json_obj
         self.dst_port = None
+        self.src_port = None
         self.mud_direction_init = ''
         # TODO: add all other fields in ACL yang data model (draft-ietf-netmod-acl-model)
         self.__parse()
@@ -56,6 +57,15 @@ class TCPMatch:
                     elif port_key == 'port':
                         port.port = obj[tcp_key][port_key]
                 self.dst_port = port
+            if tcp_key == 'source-port':
+                port_keys = obj[tcp_key].keys()
+                port = Port()
+                for port_key in port_keys:
+                    if port_key == 'operator':
+                        port.operator = obj[tcp_key][port_key]
+                    elif port_key == 'port':
+                        port.port = obj[tcp_key][port_key]
+                self.src_port = port
             elif tcp_key == 'ietf-mud:direction-initiated':
                 self.mud_direction_init = obj[tcp_key]
 
@@ -74,58 +84,57 @@ class UDPMatch:
 class EthMatch:
     def __init__(self, json_obj):
         self._json_obj = json_obj
-        self.__parse()
-
-    def __parse(self):
-        pass
-
-
-class MUDMatch:
-    def __init__(self, json_obj):
-        self._json_obj = json_obj
-        self.key = ''
-        self.value = ''
+        self.ethertype = ''
         # TODO: add all other fields in ACL yang data model (draft-ietf-netmod-acl-model)
         self.__parse()
 
     def __parse(self):
         obj = self._json_obj
-        mud_keys = obj.keys()
-        # TODO: one key only or multiple?
-        # if one key only
-        mud_key = mud_keys[0]
+        eth_items = obj.items()
+        for key, value in eth_items:
+            if key == 'ethertype':
+                assert (isinstance(value, str))
+                self.ethertype = value
+
+
+class MUDMatch:
+    """A MUD match is key and its value.
+    MUD entries match on one the following:
+        - manufacturer
+        - same-manufacturer
+        - model
+        - local-networks
+        - controller
+        - my-controller
+    """
+    def __init__(self, json_obj):
+        self._json_obj = json_obj
+        self.key = ''
+        self.value = []
+        self.__parse()
+
+    def __parse(self):
+        obj = self._json_obj
+        mud_key = list(obj.keys())[0]
         # checking type of object in mud match
         if mud_key == 'manufacturer':
-            assert (isinstance(obj[self.key], str))
+            assert (isinstance(obj[mud_key], str))
         elif mud_key == 'same-manufacturer':
             # should be empty list. see rfc https://datatracker.ietf.org/doc/draft-ietf-opsawg-mud/
-            assert (type(obj[self.key]) == list and len(obj[self.key]) == 0)
+            assert (type(obj[mud_key]) == list)
         elif mud_key == 'model':
-            assert (isinstance(obj[self.key], str))
+            assert (isinstance(obj[mud_key], str))
         elif mud_key == 'local-networks':
             # should be empty list. see rfc https://datatracker.ietf.org/doc/draft-ietf-opsawg-mud/
-            assert (type(obj[self.key]) == list and len(obj[self.key]) == 0)
+            assert (type(obj[mud_key]))
         elif mud_key == 'controller':
-            assert (isinstance(obj[self.key], str))
+            assert (isinstance(obj[mud_key], str))
         elif mud_key == 'my-controller':
             # should be empty list. see rfc https://datatracker.ietf.org/doc/draft-ietf-opsawg-mud/
-            assert (type(obj[self.key]) == list and len(obj[self.key]) == 0)
-        self.value = obj[self.key]
+            assert (type(obj[mud_key]) == list)
+        self.key = mud_key
+        self.value.append(obj[mud_key])
 
-        # if multiple keys, need keys array in self
-        # for mud_key in mud_keys:
-        #     if mud_key == 'manufacturer':
-        #         pass
-        #     elif mud_key == 'same-manufacturer':
-        #         pass
-        #     elif mud_key == 'model':
-        #         pass
-        #     elif mud_key == 'local-networks':
-        #         pass
-        #     elif mud_key == 'controller':
-        #         pass
-        #     elif mud_key == 'my-controller':
-        #         pass
 
 
 
