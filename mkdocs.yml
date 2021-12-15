@@ -1,6 +1,6 @@
 site_name: MudParser Documentation
 site_description: Production-ready parser for MUD (Manufacturer Usage Description) profiles - RFC 8520 & RFC 9761 compliant
-site_url: https://elmiomar.github.io/mudparser
+site_url: https://elmimouni.net/mudparser
 repo_url: https://github.com/elmiomar/mudparser
 repo_name: elmiomar/mudparser
 

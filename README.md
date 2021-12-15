@@ -1553,7 +1553,7 @@ for name in dns_names:
 
 ### Getting Help
 
-1. Check the [documentation](https://elmiomar.github.io/mudparser)
+1. Check the [documentation](https://elmimouni.net/mudparser)
 2. Search [existing issues](https://github.com/elmiomar/mudparser/issues)
 3. Open a [new issue](https://github.com/elmiomar/mudparser/issues/new)
 
@@ -1636,7 +1636,7 @@ SOFTWARE.
 
 ## Links
 
-- **Documentation**: [https://elmiomar.github.io/mudparser](https://elmiomar.github.io/mudparser)
+- **Documentation**: [https://elmimouni.net/mudparser](https://elmimouni.net/mudparser)
 - **GitHub Repository**: [https://github.com/elmiomar/mudparser](https://github.com/elmiomar/mudparser)
 - **Issue Tracker**: [https://github.com/elmiomar/mudparser/issues](https://github.com/elmiomar/mudparser/issues)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)

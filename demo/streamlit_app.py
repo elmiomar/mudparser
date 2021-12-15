@@ -110,7 +110,7 @@ def main():
         MudParser parses MUD (Manufacturer Usage Description) profiles
         that define network access policies for IoT devices.
 
-        [Documentation](https://elmiomar.github.io/mudparser) |
+        [Documentation](https://elmimouni.net/mudparser) |
         [GitHub](https://github.com/elmiomar/mudparser)
         """)
 

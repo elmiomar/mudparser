@@ -83,7 +83,7 @@ mudparser = "mudparser.cli:app"
 
 [project.urls]
 Homepage = "https://github.com/elmiomar/mudparser"
-Documentation = "https://elmiomar.github.io/mudparser"
+Documentation = "https://elmimouni.net/mudparser"
 Repository = "https://github.com/elmiomar/mudparser"
 Issues = "https://github.com/elmiomar/mudparser/issues"
 Changelog = "https://github.com/elmiomar/mudparser/blob/main/CHANGELOG.md"

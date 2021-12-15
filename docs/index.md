@@ -73,7 +73,7 @@ pip install mudparser[all]
 
     Get started with installing MudParser
 
-    [:octicons-arrow-right-24: Installation Guide](installation.md)
+    [Installation Guide →](installation.md)
 
 -   :material-rocket-launch:{ .lg .middle } **Quick Start**
 
@@ -81,7 +81,7 @@ pip install mudparser[all]
 
     Parse your first MUD profile in 5 minutes
 
-    [:octicons-arrow-right-24: Quick Start](quickstart.md)
+    [Quick Start →](quickstart.md)
 
 -   :material-book-open-variant:{ .lg .middle } **User Guide**
 
@@ -89,7 +89,7 @@ pip install mudparser[all]
 
     Learn how to use all features
 
-    [:octicons-arrow-right-24: User Guide](user-guide/parsing-mud-files.md)
+    [User Guide →](user-guide/parsing-mud-files.md)
 
 -   :material-api:{ .lg .middle } **API Reference**
 
@@ -97,7 +97,7 @@ pip install mudparser[all]
 
     Detailed API documentation
 
-    [:octicons-arrow-right-24: API Reference](api-reference/parser.md)
+    [API Reference →](api-reference/parser.md)
 
 </div>
 
